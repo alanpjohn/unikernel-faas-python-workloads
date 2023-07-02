@@ -1,0 +1,3 @@
+$(eval $(call addlib,myfunc))
+
+MYFUNC_SRCS-y += $(MYFUNC_BASE)/main.c

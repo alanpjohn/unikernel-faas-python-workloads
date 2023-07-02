@@ -1,0 +1,42 @@
+specification: v0.5
+name: faas-python
+unikraft:
+  version: stable
+  kconfig:
+    - CONFIG_LIBUK9P=y
+    - CONFIG_LIB9PFS=y
+    - CONFIG_LIBDEVFS=y
+    - CONFIG_LIBDEVFS_AUTOMOUNT=y
+    - CONFIG_LIBVFSCORE_AUTOMOUNT_ROOTFS=y
+    - CONFIG_LIBVFSCORE_ROOTFS_9PFS=y
+    - CONFIG_LIBVFSCORE_ROOTDEV="fs0"
+    - CONFIG_LIBUKLIBPARAM=y
+libraries:
+  # musl: .unikraft/libs/musl
+  # lwip: .unikraft/libs/lwip
+  # zlib: .unikraft/libs/zlib
+  musl: stable
+  lwip: 
+    version: stable
+    kconfig:
+      - CONFIG_LWIP_UKNETDEV=y
+      - CONFIG_LWIP_TCP=y
+      - CONFIG_LWIP_THREADS=y
+      - CONFIG_LWIP_SOCKET=y
+      - CONFIG_LWIP_AUTOIFACE=y
+      - CONFIG_LWIP_IPV4=y
+      - CONFIG_LWIP_DHCP=y
+      - CONFIG_LWIP_SOCKET_PPOLL=n
+  zlib: stable
+  python3: 
+    version: stable
+    kconfig:
+      - CONFIG_LIBPYTHON3=y
+      - CONFIG_LIBPYTHON3_EXTENSIONS=y
+      - CONFIG_LIBPYTHON3_EXTENSION_EXPAT=y
+      - CONFIG_LIBPYTHON3_EXTENSION_LIBMPDEC=y
+      - CONFIG_LIBPYTHON3_EXTENSION_ZLIB=y
+targets:
+  - name: faas-python-kvm
+    architecture: x86_64
+    platform: kvm
