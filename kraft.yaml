@@ -3,6 +3,7 @@ name: faas-python
 unikraft:
   version: stable
   kconfig:
+    - CONFIG_STACK_SIZE_PAGE_ORDER=10
     - CONFIG_LIBUK9P=y
     - CONFIG_LIB9PFS=y
     - CONFIG_LIBDEVFS=y
