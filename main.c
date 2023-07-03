@@ -3,6 +3,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <unistd.h>
+#include <string.h>
 
 #include <Python.h>
 
@@ -17,7 +18,7 @@ static const char reply[] = "HTTP/1.1 200 OK\r\n" \
 			    "<body><h1>It works!</h1><p>This is only a test.</p></body>" \
 			    "</html>\n";
 
-#define BUFLEN 2048
+#define BUFLEN 104857600
 static char recvbuf[BUFLEN];
 
 int main(int argc, char *argv[])
@@ -53,10 +54,22 @@ int main(int argc, char *argv[])
 		goto out;
 	}
 
-	char filename[] = "wrapper.py";
-	FILE* fp;
-
 	Py_Initialize();
+
+	PyObject *module = PyImport_ImportModule("app.wrapper");
+	if(!module) {
+        // The import failed.
+        // Double check spelling in import call and confirm
+        // you can import platform in Python on system.
+        printf("\nCould not import wrapper module.\n");
+        goto out;
+    }
+
+	PyObject *wrapper_function = PyObject_GetAttrString(module,"wrapper");
+	if(!wrapper_function || !PyCallable_Check(wrapper_function)){
+		printf("\nCould not import handler function from module\n");
+        goto out;
+	}
 
 	printf("Listening on port %d...\n", LISTEN_PORT);
 	while (1) {
@@ -72,25 +85,37 @@ int main(int argc, char *argv[])
 
 		clock_gettime(CLOCK_MONOTONIC, &start);
 
-		fp = _Py_fopen(filename, "r");
-		PyRun_SimpleFile(fp, filename);
+
+		PyObject *args = Py_BuildValue("(s)",recvbuf);
+
+		PyObject *output = PyObject_CallObject(wrapper_function,args);
+		Py_XDECREF(args);
+		PyObject* str = PyUnicode_AsEncodedString(output, "utf-8", "~E~");
+        const char * system_str = PyBytes_AS_STRING(str);
+        // printf("Function output:\n%s\n\n", system_str);
+
+
+		// fp = _Py_fopen(filename, "r");
+		// PyRun_SimpleFile(fp, filename);
 
 		clock_gettime(CLOCK_MONOTONIC, &end);
 
 		printf("Function execution: %.5f\n", ((double)end.tv_sec + 1.0e-9*end.tv_nsec) - ((double)start.tv_sec + 1.0e-9*start.tv_nsec));
 
 		/* Send reply */
-		n = write(client, reply, sizeof(reply));
+		n = write(client, system_str, strlen(system_str));
 		if (n < 0)
 			fprintf(stderr, "Failed to send a reply\n");
 		else
-			printf("Sent a reply\n");
+			printf("Sent a reply");
 
 		/* Close connection */
 		close(client);
 	}
+	Py_XDECREF(wrapper_function);
 	Py_Finalize();
 
 out:
+	close(srv);
 	return rc;
 }
