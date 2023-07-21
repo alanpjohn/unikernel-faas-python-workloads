@@ -3,20 +3,10 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <unistd.h>
-#include <string.h>
 
 #include <Python.h>
 
 #define LISTEN_PORT 8123
-static const char reply[] = "HTTP/1.1 200 OK\r\n" \
-			    "Content-type: text/html\r\n" \
-			    "Connection: close\r\n" \
-			    "\r\n" \
-			    "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">" \
-			    "<html>" \
-			    "<head><title>It works!</title></head>" \
-			    "<body><h1>It works!</h1><p>This is only a test.</p></body>" \
-			    "</html>\n";
 
 #define BUFLEN 104857600
 static char recvbuf[BUFLEN];
@@ -94,10 +84,6 @@ int main(int argc, char *argv[])
         const char * system_str = PyBytes_AS_STRING(str);
         // printf("Function output:\n%s\n\n", system_str);
 
-
-		// fp = _Py_fopen(filename, "r");
-		// PyRun_SimpleFile(fp, filename);
-
 		clock_gettime(CLOCK_MONOTONIC, &end);
 
 		printf("Function execution: %.5f\n", ((double)end.tv_sec + 1.0e-9*end.tv_nsec) - ((double)start.tv_sec + 1.0e-9*start.tv_nsec));
@@ -107,7 +93,7 @@ int main(int argc, char *argv[])
 		if (n < 0)
 			fprintf(stderr, "Failed to send a reply\n");
 		else
-			printf("Sent a reply");
+			printf("Sent a reply\n");
 
 		/* Close connection */
 		close(client);
