@@ -1,0 +1,7 @@
+spec: v0.6
+
+runtime: alanjohn/app-python3:qemu-0.1.1
+
+rootfs: ./Dockerfile
+
+cmd: ["/app/server.py"]

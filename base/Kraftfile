@@ -1,0 +1,69 @@
+---
+spec: v0.6
+name: python3
+unikraft:
+  version: 0.15.0
+  kconfig:
+    - CONFIG_LIBDEVFS=y
+    - CONFIG_LIBUKLIBPARAM=y
+    - CONFIG_STACK_SIZE_PAGE_ORDER=10
+targets:
+  - name: python3-qemu-x86_64-9pfs
+    architecture: x86_64
+    platform: qemu
+    kconfig:
+      - CONFIG_PLAT_KVM=y
+      - CONFIG_LIBVFSCORE_AUTOMOUNT_ROOTFS=y
+      - CONFIG_LIBVFSCORE_ROOTFS_9PFS=y
+      - CONFIG_LIBVFSCORE_ROOTFS="9pfs"
+      - CONFIG_LIBVFSCORE_ROOTDEV="fs1"
+  - name: python3-qemu-x86_64-initrd
+    architecture: x86_64
+    platform: qemu
+    kconfig:
+      - CONFIG_PLAT_KVM=y
+      - CONFIG_LIBVFSCORE_AUTOMOUNT_ROOTFS=y
+      - CONFIG_LIBVFSCORE_ROOTFS_INITRD=y
+      - CONFIG_LIBVFSCORE_ROOTFS="initrd"
+  - name: python3-fc-x86_64-initrd
+    architecture: x86_64
+    platform: firecracker
+    kconfig:
+      - CONFIG_PLAT_KVM=y
+      - CONFIG_KVM_BOOT_PROTO_LXBOOT=y
+      - CONFIG_KVM_VMM_FIRECRACKER=y
+      - CONFIG_LIBVIRTIO_BUS=y
+      - CONFIG_LIBVIRTIO_MMIO=y
+      - CONFIG_LIBUKBUS=y
+      - CONFIG_LIBVFSCORE_AUTOMOUNT_ROOTFS=y
+      - CONFIG_LIBVFSCORE_ROOTFS_INITRD=y
+      - CONFIG_LIBVFSCORE_ROOTFS="initrd"
+libraries:
+  musl:
+    version: 0.15.0
+  lwip:
+    version: 0.15.0
+  python3:
+    version: 0.15.0
+    kconfig:
+      - CONFIG_LIBPYTHON3=y
+      - CONFIG_LIBPYTHON3_EXTENSIONS=y
+      - CONFIG_LIBPYTHON3_EXTENSION_EXPAT=y
+      - CONFIG_LIBPYTHON3_EXTENSION_LIBMPDEC=y
+      - CONFIG_LIBPYTHON3_EXTENSION_UUID=y
+      - CONFIG_LIBPYTHON3_EXTENSION_ZLIB=y
+      - CONFIG_LIBPYTHON3_EXTENSION_SSL=y
+      - CONFIG_LIBPYTHON3_MAIN_FUNCTION=y
+      - CONFIG_LIBPYTHON3_PYTHONHOME=/lib/python3.10
+      - CONFIG_LIBPYTHON3_PYTHONPATH=/lib/python3.10
+  compiler-rt:
+    version: 0.15.0  
+  openssl:
+    version: 0.15.0
+    kconfig:
+      - CONFIG_LIBSSL=y
+      - CONFIG_LIBCRYPTO=y
+  zlib:
+    version: 0.15.0
+  libuuid:
+    version: 0.15.0
