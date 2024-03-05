@@ -1,7 +1,7 @@
 spec: v0.6
 
-runtime: alanpjohn/py-base:fc-0.1.0
+runtime: alanpjohn/py-base:fc-v0.1.0
 
 rootfs: ./Dockerfile
 
-cmd: ["/app/server.py"]
+cmd: ["/app/wrapper.py"]

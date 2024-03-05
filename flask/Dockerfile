@@ -10,4 +10,4 @@ FROM scratch
 
 COPY --from=base /usr/local/lib/python3.10 /lib/python3.10
 COPY --from=base /app /app
-COPY ./server.py /app/server.py
+COPY ./app/wrapper.py /app/wrapper.py
