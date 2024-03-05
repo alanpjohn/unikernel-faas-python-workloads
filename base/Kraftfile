@@ -53,6 +53,7 @@ libraries:
       - CONFIG_LIBPYTHON3_EXTENSION_UUID=y
       - CONFIG_LIBPYTHON3_EXTENSION_ZLIB=y
       - CONFIG_LIBPYTHON3_EXTENSION_SSL=y
+      - CONFIG_LIBPYTHON3_EXTENSION_PILLOW=y
       - CONFIG_LIBPYTHON3_MAIN_FUNCTION=y
       - CONFIG_LIBPYTHON3_PYTHONHOME=/lib/python3.10
       - CONFIG_LIBPYTHON3_PYTHONPATH=/lib/python3.10
@@ -66,4 +67,6 @@ libraries:
   zlib:
     version: 0.15.0
   libuuid:
+    version: 0.15.0
+  python-pillow:
     version: 0.15.0
